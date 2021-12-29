@@ -28,22 +28,17 @@ class GameScene extends Phaser.Scene{
 
       this.climb = false;
 
+      // Set initial position and bounds of camera
+      this.cameras.main.setBounds(0, 0, 800, 600); 
+      this.cameras.main.centerOn(400, 300); 
+      // Set world bounds
+      this.physics.world.setBounds(0, 0, 800, 600, true, true, true, true);
+
       //------------------------------------------------------------------------------------
       //                               LEVEL 1: CHEESE SHOP
       //------------------------------------------------------------------------------------
 
-      if (this.registry.get("Level")==2){
-
-        // Count scores for cheese types
-        this.edamScore = 0;
-        this.cheddarScore = 0;
-        this.brieScore = 0;
-
-        // Set initial position and bounds of camera
-        this.cameras.main.setBounds(0, 0, 800, 600); 
-        this.cameras.main.centerOn(400, 300); 
-        // Set world bounds
-        this.physics.world.setBounds(0, 0, 800, 600, true, true, true, true);
+      if (this.registry.get("Level")==1){
 
         // Add background image
         this.add.image(400, 300, 'cheesecounter');
@@ -52,25 +47,27 @@ class GameScene extends Phaser.Scene{
         const map = this.make.tilemap({ key: "map_bonus" });
         const tileset = map.addTilesetImage("bkg_sheet", "bkg_sheet_extruded", 20, 20, 1, 2);
         const worldLayer = map.createStaticLayer("World", tileset, 0, 0);
-        worldLayer.setCollisionBetween(0, 1400);
+        worldLayer.setCollisionBetween(0, 1400); 
 
-        // Display edam score on the left
-        this.edamText = this.add.text(16, 16, 'Edam: 0', { fontSize: '32px', fill: '#FFF' }).setScrollFactor(0);
-        this.edamText.setText('Edam: ' + this.edamScore);
-        // Display cheddar score on the right
-        this.cheddarText = this.add.text(186, 16, 'Cheddar: 0', { fontSize: '32px', fill: '#FFF' }).setScrollFactor(0);
-        this.cheddarText.setText('Cheddar: '+this.cheddarScore);
-        this.brieText = this.add.text(406, 16, 'Brie: 0', { fontSize: '32px', fill: '#FFF' }).setScrollFactor(0);
-        this.brieText.setText('Brie: '+this.brieScore);
+        
+        this.edamText = this.add.text(50, 16, this.registry.get('EdamScore'), { fontSize: '32px', fill: '#FFF' }).setScrollFactor(0);
+        this.cheddarText = this.add.text(50, 54, this.registry.get('CheddarScore'), { fontSize: '32px', fill: '#FFF' }).setScrollFactor(0);
+        this.brieText = this.add.text(50, 92, this.registry.get('BrieScore'), { fontSize: '32px', fill: '#FFF' }).setScrollFactor(0);
+        this.images = this.physics.add.group({
+          allowGravity: false
+        })
+        this.images.create(25, 26, 'edam').setScale(2);
+        this.images.create(25, 66, 'cheddar').setScale(2);
+        this.images.create(27, 108, 'brie').setScale(2);
   
         player = this.physics.add.sprite(50, 500, 'pete').setScale(2);
         player.setBounce(0.2);
         player.setCollideWorldBounds(true);
 
         // Set a one minute timer
-        timedEvent = this.time.delayedCall(60000, onEventBonus, [], this);
+        timedEvent = this.time.delayedCall(40000, onEventBonus, [], this);
         // Display remaining time
-        timeText = this.add.text(600, 16, 'Time: 60', { fontSize: '32px', fill: '#FFF' }).setScrollFactor(0);
+        timeText = this.add.text(600, 16, 'Time: 40', { fontSize: '32px', fill: '#FFF' }).setScrollFactor(0);
 
         // Add in cheese collectibles
         collectibles = this.physics.add.group();
@@ -85,7 +82,6 @@ class GameScene extends Phaser.Scene{
           child.setBounce(1);
           child.setCollideWorldBounds(true);
           child.setVelocity(Phaser.Math.Between(-60, 60), 20);
-          child.allowGravity = false;
         });
 
         let hazards = this.physics.add.group();
@@ -96,7 +92,6 @@ class GameScene extends Phaser.Scene{
           child.setBounce(1);
           child.setCollideWorldBounds(true);
           child.setVelocity(Phaser.Math.Between(-60, 60), 20);
-          child.allowGravity = false;
         });
 
         // Colliders and overlaps
@@ -109,17 +104,10 @@ class GameScene extends Phaser.Scene{
       }
 
       //------------------------------------------------------------------------------------
-      //                               LEVEL 1: CHEESE TAX FRAUD
+      //                               LEVEL 2: CHEESE TAX FRAUD
       //------------------------------------------------------------------------------------
 
-      if (this.registry.get("Level")==1){
-
-        // Set initial position and bounds of camera
-        this.cameras.main.setBounds(0, 0, 800, 600); 
-        this.cameras.main.centerOn(400, 300); 
-        // Set world bounds
-        this.physics.world.setBounds(0, 0, 800, 600, true, true, true, true);
-
+      if (this.registry.get("Level")==2){
         // Add background image
         this.add.image(400, 300, 'cheese_shop');
 
@@ -131,6 +119,19 @@ class GameScene extends Phaser.Scene{
         worldLayer.setCollisionBetween(0, 1400);
         this.stairsLayer.setCollisionBetween(0, 1400);
   
+        this.edamText = this.add.text(50, 16, this.registry.get('EdamScore'), { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
+        this.cheddarText = this.add.text(50, 54, this.registry.get('CheddarScore'), { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
+        this.brieText = this.add.text(50, 92, this.registry.get('BrieScore'), { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
+        this.images = this.physics.add.group({
+          allowGravity: false
+        })
+        this.images.create(25, 26, 'edam').setScale(2);
+        this.images.create(25, 66, 'cheddar').setScale(2);
+        this.images.create(27, 108, 'brie').setScale(2);
+        this.add.text(100, 16, 'z', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
+        this.add.text(100, 54, 'x', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
+        this.add.text(100, 92, 'c', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
+
         player = this.physics.add.sprite(50, 500, 'pete').setScale(2);
         player.setBounce(0.2);
         player.setCollideWorldBounds(true);
@@ -139,6 +140,12 @@ class GameScene extends Phaser.Scene{
           allowGravity: false
         })
 
+        this.add.text(450, 10, 'Health:', { fontSize: '32px', fill: '#FFF' }).setScrollFactor(0);
+        this.health = this.add.graphics();
+        this.health.fillStyle(0xff0000, 1);
+        this.health.fillRect(0, 0, 180, 25);
+        this.health.x = 600
+        this.health.y = 16
         this.cheesemonger = this.physics.add.sprite(680, 200, 'cheesemonger').setScale(2.5)
         this.cheesemonger.setBounce(0.2);
         this.cheesemonger.setCollideWorldBounds(true);
@@ -158,10 +165,16 @@ class GameScene extends Phaser.Scene{
         this.cheesewheels.create(530, 170, 'cheddarWheel').setScale(1.5).setData('name', 'cheddar');
         this.cheesewheels.create(770, 170, 'cheddarWheel').setScale(1.5).setData('name', 'cheddar');
         this.cheesewheels.create(565, 210, 'cheddarWheel').setScale(1.5).setData('name', 'cheddar');
-        this.cheeseCount = 1;
+        this.cheeseCount = 9;
+
+        this.enemyCheese = this.physics.add.group({
+          allowGravity: false
+        })
+        this.time.delayedCall(2000, onThrowCheese, [], this);
 
         // Colliders and overlaps
         this.physics.add.collider(player, worldLayer);
+        this.physics.add.collider(player, this.enemyCheese, this.hitMouldy, null, this);
         this.physics.add.collider(this.cheesemonger, worldLayer);
         this.physics.add.collider(this.cheeses, worldLayer);
         this.physics.add.collider(this.cheeses, this.cheesewheels, this.cheeseCollide, null, this);
@@ -178,6 +191,7 @@ class GameScene extends Phaser.Scene{
       this.shouldTransition = false;
       this.transitionTime = 1000;
       this.scene.start('MenuScene');
+      return;
     }
     // If transition begun don't update game any more
     if(this.shouldTransition){
@@ -218,36 +232,42 @@ class GameScene extends Phaser.Scene{
     }
 
     // Update time remaining text for bonus round
-    if(this.registry.get("Level")==2){
+    if(this.registry.get("Level")==1){
       var elapsed = timedEvent.getElapsedSeconds();
-      var timeLeft = 60. - elapsed;
+      var timeLeft = 40. - elapsed;
       timeText.setText('Time: ' + timeLeft.toString().substr(0, 4));
     } 
 
-    if(this.registry.get("Level")==1){
+    if(this.registry.get("Level")==2){
       let vx = player.body.velocity.x
       let vy = player.body.velocity.y
       let norm = 200 / (Math.sqrt(vx*vx+vy*vy))
-      if(this.brieKey.isDown){
+      if(this.registry.get('BrieScore') > 0 && this.brieKey.isDown){
         this.brieKey.reset()
         let newBrie = this.cheeses.create(player.x, player.y, 'brie').setScale(2);
         newBrie.setData('name', 'brie');
         newBrie.setBounce(1);
         newBrie.setVelocity(vx*norm, vy*norm);
+        this.registry.set('BrieScore', this.registry.get('BrieScore')-1);
+        this.brieText.setText(this.registry.get('BrieScore'));
       }
-      if(this.edamKey.isDown){
+      if(this.registry.get('EdamScore') > 0 && this.edamKey.isDown){
         this.edamKey.reset()
         let newEdam = this.cheeses.create(player.x, player.y, 'edam').setScale(2);
         newEdam.setData('name', 'edam');
         newEdam.setBounce(1);
         newEdam.setVelocity(vx*norm, vy*norm);
+        this.registry.set('EdamScore', this.registry.get('EdamScore')-1);
+        this.edamText.setText(this.registry.get('EdamScore'));
       }
-      if(this.cheddarKey.isDown){
+      if(this.registry.get('CheddarScore') > 0 && this.cheddarKey.isDown){
         this.cheddarKey.reset()
         let newCheddar = this.cheeses.create(player.x, player.y, 'cheddar').setScale(2);
         newCheddar.setData('name', 'cheddar');
         newCheddar.setBounce(1);
         newCheddar.setVelocity(vx*norm, vy*norm);
+        this.registry.set('CheddarScore', this.registry.get('CheddarScore')-1);
+        this.cheddarText.setText(this.registry.get('CheddarScore'));
       }
 
       if (this.cheesemonger.body.velocity.x < 0) {
@@ -287,14 +307,14 @@ class GameScene extends Phaser.Scene{
     cheese.disableBody(true, true);
     // Add 1 to lydias score and update text
     if (cheeseName === 'edam') {
-      this.edamScore += 1;
-      this.edamText.setText('Edam: ' + this.edamScore);
+      this.registry.set('EdamScore', this.registry.get('EdamScore')+1);
+      this.edamText.setText(this.registry.get('EdamScore'));
     } else if (cheeseName === 'cheddar') {
-      this.cheddarScore += 1;
-      this.cheddarText.setText('Cheddar: ' + this.cheddarScore);
+      this.registry.set('CheddarScore', this.registry.get('CheddarScore')+1);
+      this.cheddarText.setText(this.registry.get('CheddarScore'));
     } else if (cheeseName === 'brie') {
-      this.brieScore += 1;
-      this.brieText.setText('Brie: ' + this.brieScore);
+      this.registry.set('BrieScore', this.registry.get('BrieScore')+1);
+      this.brieText.setText(this.registry.get('BrieScore'));
     }
     // Add and configure new toy of the same type
     var newCheese = collectibles.create(Phaser.Math.Between(25, 775), 0, cheeseName).setScale(2);
@@ -302,7 +322,6 @@ class GameScene extends Phaser.Scene{
     newCheese.setBounce(1);
     newCheese.setCollideWorldBounds(true);
     newCheese.setVelocity(Phaser.Math.Between(-60, 60), 20);
-    newCheese.setAllowGravity(false);
     collectibles.remove(cheese);
 
   }
@@ -344,6 +363,9 @@ class GameScene extends Phaser.Scene{
     enemy.setTint(0xff0000);
     enemy.setVelocityX(0);
     this.time.delayedCall(500, onHitEnemy, [], this);
+    this.health.clear();
+    this.health.fillStyle(0xff0000, 1);
+    this.health.fillRect(0, 0, this.enemyHealth*60, 25);
 
     if (this.enemyHealth==0) {
       enemy.disableBody(true, true);
@@ -373,6 +395,16 @@ function onEventBonus()
     this.transitionTime = 1000;
     this.physics.pause();
     this.cameras.main.fade(1000);
+}
+
+function onThrowCheese()
+{
+    let vx = player.x - this.cheesemonger.x
+    let vy = player.y - this.cheesemonger.y
+    let norm = 200 / (Math.sqrt(vx*vx+vy*vy))
+    var newCheese = this.enemyCheese.create(this.cheesemonger.x, this.cheesemonger.y, 'mouldy').setScale(2);
+    newCheese.setVelocity(vx*norm, vy*norm);
+    this.time.delayedCall(3000, onThrowCheese, [], this);
 }
 
 function onHitEnemy()

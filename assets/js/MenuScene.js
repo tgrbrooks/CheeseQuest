@@ -39,7 +39,7 @@ class MenuScene extends Phaser.Scene{
       //                              LEVEL 1: CHEESE SHOP
       //------------------------------------------------------------------------------------
 
-      if(this.registry.get('Level') == 2){
+      if(this.registry.get('Level') == 1){
         // Add background image
         this.add.image(400, 300, 'menu_level1');
         // Add and center main body text
@@ -61,7 +61,7 @@ class MenuScene extends Phaser.Scene{
       //                              LEVEL 2: CHEESE TAX FRAUD
       //------------------------------------------------------------------------------------
 
-      if(this.registry.get('Level') == 1){
+      if(this.registry.get('Level') == 2){
         // Add background image
         this.add.image(400, 300, 'menu_level2');
         // Add and center main body text

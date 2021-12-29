@@ -23,14 +23,20 @@ class GameOverScene extends Phaser.Scene{
       //                              LEVEL 0: CHEESE
       //------------------------------------------------------------------------------------
 
-      if(this.registry.get('Level') == 0){
+      if(this.registry.get('Level') == 1){
         // Add and center failure message
-        this.failText = this.add.bitmapText(20, 240, 'font', 'YOU DIDNT COLLECT ENOUGH CHEESE', 16, 1);
+        this.failText = this.add.bitmapText(20, 450, 'font', 'YOU DIDNT COLLECT ENOUGH CHEESE', 16, 1);
+        this.failText.setX((800-this.failText.width)/2.)
+      }
+
+      if(this.registry.get('Level') == 2){
+        // Add and center failure message
+        this.failText = this.add.bitmapText(20, 450, 'font', 'THE CHEESEMONGER AVOIDED TAX ON\n\nA PRIME WHEEL OF STILTON', 16, 1);
         this.failText.setX((800-this.failText.width)/2.)
       }
 
       // Add and center continue text
-      this.pressX = this.add.bitmapText(200, 550, 'font', 'PRESS X TO RESTART LEVEL', 16, 1);
+      this.pressX = this.add.bitmapText(200, 550, 'font', 'PRESS X TO RESTART GAME', 16, 1);
       this.pressX.setX((800-this.pressX.width)/2.);
 
   }
@@ -55,6 +61,7 @@ class GameOverScene extends Phaser.Scene{
         // Go back to menu when transition completed
         this.transitionTime -= delta;
         if(this.shouldTransition && this.transitionTime < 0){
+          this.registry.set('Level', 1)
           this.scene.start('MenuScene');
         }
   } 
