@@ -49,7 +49,7 @@ class BootScene extends Phaser.Scene {
         this.load.image('cheddarWheel',    'assets/images/items/cheddarWheel.png');
 
         // Sprite sheets
-        this.load.spritesheet('pete',         'assets/images/spritesheets/pete-bag.png', { frameWidth: 25, frameHeight: 40 });
+        this.load.spritesheet('pete',         'assets/images/spritesheets/pete-bag.png', { frameWidth: 25, frameHeight: 38 });
         this.load.spritesheet('cheesemonger', 'assets/images/spritesheets/cheesemonger.png', { frameWidth: 20, frameHeight: 25 });
 
         // Fonts
@@ -67,6 +67,7 @@ class BootScene extends Phaser.Scene {
     }
 
     create() {
+      this.registry.set('Mobile', false)
       this.registry.set('Level', 0);
       this.registry.set('StartGame', false);
       this.registry.set('BrieScore', 0);

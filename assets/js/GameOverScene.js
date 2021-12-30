@@ -36,8 +36,14 @@ class GameOverScene extends Phaser.Scene{
       }
 
       // Add and center continue text
-      this.pressX = this.add.bitmapText(200, 550, 'font', 'PRESS X TO RESTART GAME', 16, 1);
+      this.pressX = this.add.bitmapText(200, 550, 'font', 'PRESS X OR TAP TO RESTART GAME', 16, 1);
       this.pressX.setX((800-this.pressX.width)/2.);
+
+      this.input.on('pointerdown', function (pointer) {
+        this.shouldTransition = true;
+        this.transitionTime = 1000;
+        this.cameras.main.fade(1000);  
+      }, this);
 
   }
 

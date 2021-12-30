@@ -23,7 +23,7 @@ class MenuScene extends Phaser.Scene{
       // Configure meny differently for each level
       if(this.registry.get('Level') == 0){
         // Add background image
-        this.add.image(400, 300, 'start_screen');
+        this.add.image(400, 300, 'start_screen'); 
         this.animTime = 0;
         // Add and center main body text
         this.starringText = this.add.bitmapText(100, 200, 'font', 'STARRING\n\nCHEESE BAG', 20, 1);
@@ -31,7 +31,7 @@ class MenuScene extends Phaser.Scene{
         // Add images of pete
         this.physics.add.staticGroup().create(400, 380, 'pete').setScale(4).anims.play('turn');
         // Add and center continue text
-        this.pressX = this.add.bitmapText(270, 550, 'font', 'PRESS X TO BEGIN', 16);
+        this.pressX = this.add.bitmapText(270, 550, 'font', 'PRESS X OR TAP TO BEGIN', 16);
         this.pressX.setX((800-this.pressX.width)/2.);
       }
 
@@ -53,7 +53,7 @@ class MenuScene extends Phaser.Scene{
         this.physics.add.staticGroup().create(460, 420, 'edam').setScale(3);
         this.physics.add.staticGroup().create(650, 420, 'mouldy').setScale(3);
         // Add and center continue text
-        this.pressX = this.add.bitmapText(270, 550, 'font', 'PRESS X TO START', 16);
+        this.pressX = this.add.bitmapText(270, 550, 'font', 'PRESS X OR TAP TO START', 16);
         this.pressX.setX((800-this.pressX.width)/2.);
       }
 
@@ -68,7 +68,7 @@ class MenuScene extends Phaser.Scene{
         this.starringText = this.add.bitmapText(20, 400, 'font', "A ROUGE CHEESEMONGER HAS FILED A\n\nFRAUDULENT TAX RETURN!\n\nONLY YOU CAN USE YOUR CHEESE\n\nTO BRING HER TO JUSTICE", 16, 1);
         this.starringText.setX((800-this.starringText.width)/2.);
         // Add and center continue text
-        this.pressX = this.add.bitmapText(270, 550, 'font', 'PRESS X TO START', 16);
+        this.pressX = this.add.bitmapText(270, 550, 'font', 'PRESS X OR TAP TO START', 16);
         this.pressX.setX((800-this.pressX.width)/2.);
       }
 
@@ -76,9 +76,16 @@ class MenuScene extends Phaser.Scene{
         // Add background image
         this.add.image(400, 300, 'menu_complete');
         // Add and center continue text
-        this.pressX = this.add.bitmapText(230, 550, 'font', 'PRESS X TO RESTART GAME', 16);
+        this.pressX = this.add.bitmapText(230, 550, 'font', 'PRESS X OR TAP TO RESTART GAME', 16);
         this.pressX.setX((800-this.pressX.width)/2.);
       }
+
+      this.input.on('pointerdown', function (pointer) {
+        this.registry.set('Mobile', true)
+        this.shouldTransition = true;
+        this.transitionTime = 1000;
+        this.cameras.main.fade(1000);  
+      }, this);
 
   }
 
