@@ -3,23 +3,17 @@
 <head> 
     <meta charset="UTF-8" />
     <title>Cheese Quest</title>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.19.0/dist/phaser.js"></script>
     <script src="assets/js/BootScene.js"></script>
     <script src="assets/js/MenuScene.js"></script>
     <script src="assets/js/GameScene.js"></script>
     <script src="assets/js/GameOverScene.js"></script>
     <style type="text/css">
         body {
-            margin: auto;
             background-color: black;
         }
         canvas{
             display:block;
-            margin: 0;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
         }
     </style>
 </head>
@@ -29,8 +23,12 @@
 
 var config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 800,
+        height: 600
+    },
     backgroundColor: 0x000000,
     pixelArt: true,
     physics: {

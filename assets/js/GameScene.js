@@ -34,7 +34,9 @@ class GameScene extends Phaser.Scene{
       this.cameras.main.setBounds(0, 0, 800, 600); 
       this.cameras.main.centerOn(400, 300); 
       // Set world bounds
-      this.physics.world.setBounds(0, 0, 800, 600, true, true, true, true);
+      this.physics.world.setBounds(0, 0, 800, 600, true, true, true, true); 
+
+      const textStyle = { fontSize: '32px', fill: '#FFF', stroke: '#000', strokeThickness: 6 }
 
       //------------------------------------------------------------------------------------
       //                               LEVEL 1: CHEESE SHOP
@@ -58,7 +60,7 @@ class GameScene extends Phaser.Scene{
         // Set a one minute timer
         timedEvent = this.time.delayedCall(40000, onEventBonus, [], this);
         // Display remaining time
-        timeText = this.add.text(600, 16, 'Time: 40', { fontSize: '32px', fill: '#FFF' }).setScrollFactor(0);
+        timeText = this.add.text(310, 16, 'Time: 40', textStyle).setScrollFactor(0);
 
         // Add in cheese collectibles
         collectibles = this.physics.add.group();
@@ -110,9 +112,11 @@ class GameScene extends Phaser.Scene{
         worldLayer.setCollisionBetween(0, 1400);
         this.stairsLayer.setCollisionBetween(0, 1400);
   
-        this.add.text(140, 16, 'z', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
-        this.add.text(140, 92, 'x', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
-        this.add.text(140, 168, 'c', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
+        if(!this.registry.get('Mobile')) {
+          this.add.text(140, 16, 'z', textStyle).setScrollFactor(0);
+          this.add.text(140, 92, 'x', textStyle).setScrollFactor(0);
+          this.add.text(140, 168, 'c', textStyle).setScrollFactor(0);
+        }
 
         player = this.physics.add.sprite(50, 500, 'pete').setScale(2);
         player.setBounce(0.2);
@@ -122,11 +126,11 @@ class GameScene extends Phaser.Scene{
           allowGravity: false
         })
 
-        this.add.text(450, 10, 'Health:', { fontSize: '32px', fill: '#FFF' }).setScrollFactor(0);
+        this.add.text(200, 10, 'Health:', textStyle).setScrollFactor(0);
         this.health = this.add.graphics();
         this.health.fillStyle(0xff0000, 1);
         this.health.fillRect(0, 0, 180, 25);
-        this.health.x = 600
+        this.health.x = 350
         this.health.y = 16
         this.cheesemonger = this.physics.add.sprite(680, 200, 'cheesemonger').setScale(2.5)
         this.cheesemonger.setBounce(0.2);
@@ -163,13 +167,9 @@ class GameScene extends Phaser.Scene{
 
       }
 
-      let textFill = '#FFF'
-      if(this.registry.get("Level") == 2){
-        textFill = '#000'
-      }
-      this.edamText = this.add.text(100, 16, this.registry.get('EdamScore'), { fontSize: '32px', fill: textFill }).setScrollFactor(0);
-      this.cheddarText = this.add.text(100, 92, this.registry.get('CheddarScore'), { fontSize: '32px', fill: textFill }).setScrollFactor(0);
-      this.brieText = this.add.text(100, 168, this.registry.get('BrieScore'), { fontSize: '32px', fill: textFill }).setScrollFactor(0);
+      this.edamText = this.add.text(100, 16, this.registry.get('EdamScore'), textStyle).setScrollFactor(0);
+      this.cheddarText = this.add.text(100, 92, this.registry.get('CheddarScore'), textStyle).setScrollFactor(0);
+      this.brieText = this.add.text(100, 168, this.registry.get('BrieScore'), textStyle).setScrollFactor(0);
       this.images = this.physics.add.group({
         allowGravity: false
       })
@@ -193,6 +193,19 @@ class GameScene extends Phaser.Scene{
         this.upButton.fillStyle(0xff0000, 0.5);
         this.upButton.fillTriangle(100, 550, 180, 550, 140, 500);
       }
+
+      var button = this.add.image(800-16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+      button.on('pointerup', function () {
+        if (this.scale.isFullscreen){
+            button.setFrame(0);
+            this.scale.stopFullscreen();
+        }
+        else{
+            button.setFrame(1);
+            this.scale.startFullscreen();
+        }
+
+      }, this);
 
   }
 
@@ -259,15 +272,16 @@ class GameScene extends Phaser.Scene{
       if (this.registry.get("Mobile")) {
         vx = pointer.x - player.x
         vy = pointer.y - player.y
-        if (pointer.isDown && pointer.x > 300 && pointer.y < 400){
+        if (pointer.isDown && pointer.x > 300 && pointer.x < 704 && pointer.y < 400 && pointer.y > 96){
           throwCheese = true
-          pointer.reset()
+          pointer.isDown = false
+        } else {
+          throwCheese = false
         } 
       }
       const norm = 200 / (Math.sqrt(vx*vx+vy*vy))
       if(this.registry.get('BrieScore') > 0 && (this.brieKey.isDown || (this.selected === 'brie' && throwCheese))){
         this.brieKey.reset()
-        this.selected = 'none'
         this.selectedCheese.clear()
         let newBrie = this.cheeses.create(player.x, player.y, 'brie').setScale(2);
         newBrie.setData('name', 'brie');
@@ -278,7 +292,6 @@ class GameScene extends Phaser.Scene{
       }
       if(this.registry.get('EdamScore') > 0 && (this.edamKey.isDown || (this.selected === 'edam' && throwCheese))){
         this.edamKey.reset()
-        this.selected = 'none'
         this.selectedCheese.clear()
         let newEdam = this.cheeses.create(player.x, player.y, 'edam').setScale(2);
         newEdam.setData('name', 'edam');
@@ -286,10 +299,10 @@ class GameScene extends Phaser.Scene{
         newEdam.setVelocity(vx*norm, vy*norm);
         this.registry.set('EdamScore', this.registry.get('EdamScore')-1);
         this.edamText.setText(this.registry.get('EdamScore'));
+        console.log('throwing')
       }
       if(this.registry.get('CheddarScore') > 0 && (this.cheddarKey.isDown || (this.selected === 'cheddar' && throwCheese))){
         this.cheddarKey.reset()
-        this.selected = 'none'
         this.selectedCheese.clear()
         let newCheddar = this.cheeses.create(player.x, player.y, 'cheddar').setScale(2);
         newCheddar.setData('name', 'cheddar');
@@ -344,6 +357,7 @@ class GameScene extends Phaser.Scene{
         this.selectedCheese.fillStyle(0xff0000, 0.3)
         this.selectedCheese.fillCircle(40, 190, 38)
       }
+ 
     }
       
   }

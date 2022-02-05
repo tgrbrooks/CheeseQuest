@@ -51,6 +51,7 @@ class BootScene extends Phaser.Scene {
         // Sprite sheets
         this.load.spritesheet('pete',         'assets/images/spritesheets/pete-bag.png', { frameWidth: 25, frameHeight: 38 });
         this.load.spritesheet('cheesemonger', 'assets/images/spritesheets/cheesemonger.png', { frameWidth: 20, frameHeight: 25 });
+        this.load.spritesheet('fullscreen', 'assets/images/spritesheets/fullscreen.png', { frameWidth: 64, frameHeight: 64 });
 
         // Fonts
         this.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.fnt');
